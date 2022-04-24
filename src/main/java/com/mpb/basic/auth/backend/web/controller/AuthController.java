@@ -50,6 +50,8 @@ public class AuthController implements Auth {
         User user = new User();
         user.setUserName(registerRequest.getEmail());
         user.setUserStatus(UserStatus.ACTIVATED);
+        user.setLastName(registerRequest.getLastName());
+        user.setFirstName(registerRequest.getFirstName());
         user.setPassword(registerRequest.getPassword());
         Set<Role> roleList = registerRequest
                 .getRoleList()
@@ -79,7 +81,55 @@ public class AuthController implements Auth {
     }
 
     @Override
+    public ResponseEntity<ApiResponse> registerCustomer(RegisterRequest registerRequest) throws EntityNotFoundException {
+        User user = new User();
+        user.setUserName(registerRequest.getEmail());
+        user.setLastName(registerRequest.getLastName());
+        user.setFirstName(registerRequest.getFirstName());
+        user.setUserStatus(UserStatus.ACTIVATED);
+        user.setPassword(registerRequest.getPassword());
+        registerRequest
+                .getRoleList()
+                .add(ERole.ROLE_CUSTOMER);
+        Set<Role> roleList = registerRequest
+                .getRoleList()
+                .stream()
+                .map(eRole -> {
+                    Optional<Role> byName = roleRepository.findByName(eRole);
+                    if (byName.isPresent()) {
+                        return byName.get();
+                    } else {
+                        throw new EntityNotFoundException(Role.class, "id", eRole.toString());
+                    }
+                })
+                .collect(Collectors.toSet());
+        user.setRoles(roleList);
+
+        User addUser = userService.addUser(user);
+
+
+        return ResponseEntity.ok(ApiResponse
+                .builder()
+                .status(true)
+                .timestamp(new Date())
+                .message("register success")
+                .body("")
+                .build());
+    }
+
+    @Override
     public ResponseEntity<JwtResponse> login(LoginRequest loginRequest) {
         return ResponseEntity.ok(userService.login(loginRequest));
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> users() {
+        return ResponseEntity.ok(ApiResponse
+                .builder()
+                .status(true)
+                .timestamp(new Date())
+                .message("Done")
+                .body(userService.all())
+                .build());
     }
 }

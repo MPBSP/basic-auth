@@ -8,6 +8,7 @@ import com.mpb.basic.auth.backend.web.res.ApiResponse;
 import com.mpb.basic.auth.backend.web.res.JwtResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,18 @@ public interface Auth {
     @PostMapping(path = "/login")
     ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest loginRequest);
 
+    @GetMapping("/users")
+    ResponseEntity<ApiResponse> users();
+
+
     @PostMapping("/role")
     ResponseEntity<ApiResponse> createRoles(@RequestBody List<ERole> roleList);
 
     @PostMapping("/sign-up")
     ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest)
+            throws EntityNotFoundException;
+
+    @PostMapping("/sign-up-customer")
+    ResponseEntity<ApiResponse> registerCustomer(@Valid @RequestBody RegisterRequest registerRequest)
             throws EntityNotFoundException;
 }

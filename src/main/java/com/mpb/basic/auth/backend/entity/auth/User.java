@@ -51,6 +51,12 @@ public class User {
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-
     private UserStatus userStatus;
+
+    @Column()
+    private String firstName;
+
+    @Column()
+    private String lastName;
+
 }

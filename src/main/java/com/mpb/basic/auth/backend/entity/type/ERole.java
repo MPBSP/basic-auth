@@ -1,6 +1,7 @@
 package com.mpb.basic.auth.backend.entity.type;
 
 public enum ERole {
-    ROLE_USER,
-    ROLE_ADMIN
+    ROLE_EMPLOYEE,
+    ROLE_CUSTOMER,
+    ROLE_DIRECTOR
 }

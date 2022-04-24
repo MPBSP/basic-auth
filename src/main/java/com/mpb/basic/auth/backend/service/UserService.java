@@ -5,6 +5,7 @@ import com.mpb.basic.auth.backend.web.req.LoginRequest;
 import com.mpb.basic.auth.backend.web.res.JwtResponse;
 
 import javax.validation.constraints.Email;
+import java.util.List;
 
 public interface UserService {
     User getByEmail(String email);
@@ -15,4 +16,5 @@ public interface UserService {
     JwtResponse login(LoginRequest loginRequest);
 
     User addUser(User user);
+    List<User> all();
 }
